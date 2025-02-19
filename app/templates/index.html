@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}首页{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>欢迎使用</h1>
+    <p>这是一个简单的 Flask 应用</p>
+    <div class="row">
+        <div class="col">
+            <a href="{{ url_for('main.login') }}" class="btn btn-primary">登录</a>
+            <a href="{{ url_for('main.register') }}" class="btn btn-success">注册</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
