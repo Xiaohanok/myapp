@@ -1,7 +1,8 @@
-from app.function import *
 from flask import render_template, flash, redirect, url_for, request, session
 from app.models import User
 from app import db
+from flask import Blueprint
+from app.models1.hotel import add_hotel, get_all_hotels, update_hotel, delete_hotel
 
 main = Blueprint('main', __name__)
 
@@ -70,3 +71,34 @@ def register():
         return redirect(url_for('main.login'))
         
     return render_template('register.html')
+
+@main.route('/hotels', methods=['GET'])
+def list_hotels():
+    hotels = get_all_hotels()
+    return render_template('hotels.html', hotels=hotels)
+
+@main.route('/hotels/add', methods=['POST'])
+def add_new_hotel():
+    hotel_name = request.form.get('hotel_name')
+    location = request.form.get('location')
+    description = request.form.get('description')
+    price = request.form.get('price')
+    add_hotel(hotel_name, location, description, price)
+    flash('酒店添加成功！')
+    return redirect(url_for('main.list_hotels'))
+
+@main.route('/hotels/update/<int:hotel_id>', methods=['POST'])
+def update_existing_hotel(hotel_id):
+    hotel_name = request.form.get('hotel_name')
+    location = request.form.get('location')
+    description = request.form.get('description')
+    price = request.form.get('price')
+    update_hotel(hotel_id, hotel_name, location, description, price)
+    flash('酒店信息更新成功！')
+    return redirect(url_for('main.list_hotels'))
+
+@main.route('/hotels/delete/<int:hotel_id>', methods=['POST'])
+def delete_existing_hotel(hotel_id):
+    delete_hotel(hotel_id)
+    flash('酒店删除成功！')
+    return redirect(url_for('main.list_hotels'))
